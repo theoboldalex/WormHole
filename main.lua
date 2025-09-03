@@ -5,7 +5,16 @@ function love.load()
     game_started = false
     window_width = love.graphics.getWidth()
     window_height = love.graphics.getHeight()
-    
+    ships = { 
+        love.graphics.newImage("assets/ship1.png"),
+        love.graphics.newImage("assets/ship2.png"),
+    }
+    aliens = {
+        love.graphics.newImage("assets/alien1.png"),
+        love.graphics.newImage("assets/alien2.png"),
+    }
+    xpos = 55
+    ypos = 70
 end
 
 function love.update(dt)
@@ -15,6 +24,12 @@ function love.update(dt)
             start_message = ""
         end
     end
+
+    if love.keyboard.isDown("k") then
+        xpos = xpos + 50 * dt
+    elseif love.keyboard.isDown("j") then
+        xpos = xpos - 50 * dt
+    end
 end
 
 function love.draw()
@@ -22,6 +37,10 @@ function love.draw()
         draw_start_message()
         return
     end
+
+    love.graphics.scale(10, 10)
+    love.graphics.draw(aliens[1], 20, 20)
+    love.graphics.draw(ships[math.random(#ships)], xpos, ypos)
 end
 
 function draw_start_message()

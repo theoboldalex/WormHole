@@ -11,6 +11,7 @@ local set_window_parameters = function(width, height)
 end
 
 config.load = function()
+    math.randomseed(os.time())
     set_window_parameters(1200, 800)
     set_default_font()
 end
