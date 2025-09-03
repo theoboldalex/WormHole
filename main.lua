@@ -1,10 +1,20 @@
 function love.load()
     require("config").load()
 
-    start_message = "PRESS SPACE TO START"
-    game_started = false
+    VIRTUAL_WIDTH = 160
+    VIRTUAL_HEIGHT = 80
     window_width = love.graphics.getWidth()
     window_height = love.graphics.getHeight()
+    scale_x = window_width / VIRTUAL_WIDTH
+    scale_y = window_height / VIRTUAL_HEIGHT
+    scale = math.min(scale_x, scale_y)
+    SHIP_WIDTH = 8
+    SHIP_HEIGHT = 8
+    ship_pos_x = VIRTUAL_WIDTH / 2 - SHIP_WIDTH
+    ship_pos_y = VIRTUAL_HEIGHT / 0.69 - SHIP_HEIGHT
+
+    start_message = "PRESS SPACE TO START"
+    game_started = false
     ships = { 
         love.graphics.newImage("assets/ship1.png"),
         love.graphics.newImage("assets/ship2.png"),
@@ -13,8 +23,11 @@ function love.load()
         love.graphics.newImage("assets/alien1.png"),
         love.graphics.newImage("assets/alien2.png"),
     }
-    xpos = 55
-    ypos = 70
+    love.graphics.setDefaultFilter("nearest", "nearest")
+
+    music = love.audio.newSource("assets/lead_balloon_theme.wav", "stream")
+    music:setLooping(true)
+    music:play()
 end
 
 function love.update(dt)
@@ -26,9 +39,9 @@ function love.update(dt)
     end
 
     if love.keyboard.isDown("k") then
-        xpos = xpos + 50 * dt
+        ship_pos_x = ship_pos_x + 50 * dt
     elseif love.keyboard.isDown("j") then
-        xpos = xpos - 50 * dt
+        ship_pos_x = ship_pos_x - 50 * dt
     end
 end
 
@@ -38,9 +51,12 @@ function love.draw()
         return
     end
 
-    love.graphics.scale(10, 10)
-    love.graphics.draw(aliens[1], 20, 20)
-    love.graphics.draw(ships[math.random(#ships)], xpos, ypos)
+    love.graphics.push()
+    love.graphics.scale(scale)
+
+    love.graphics.draw(aliens[1], VIRTUAL_WIDTH/2, VIRTUAL_HEIGHT/2)
+    love.graphics.draw(ships[math.random(#ships)], ship_pos_x, ship_pos_y)
+    love.graphics.pop()
 end
 
 function draw_start_message()

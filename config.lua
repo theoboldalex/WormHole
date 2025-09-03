@@ -12,7 +12,7 @@ end
 
 config.load = function()
     math.randomseed(os.time())
-    set_window_parameters(1200, 800)
+    -- set_window_parameters(1200, 800)
     set_default_font()
 end
 
