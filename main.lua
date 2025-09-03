@@ -54,6 +54,12 @@ function love.draw()
     love.graphics.push()
     love.graphics.scale(scale)
 
+    love.graphics.setColor(0.1, 0.1, 0.1) -- Dark gray
+    love.graphics.rectangle("fill", 0, 0, VIRTUAL_WIDTH/2 - 20, VIRTUAL_HEIGHT) -- left wall
+    love.graphics.rectangle("fill", VIRTUAL_WIDTH/2 + 20, 0, VIRTUAL_WIDTH/2 - 20, VIRTUAL_HEIGHT) -- right wall
+    love.graphics.setColor(1, 1, 1) -- Reset to white
+
+    -- sprites
     love.graphics.draw(aliens[1], VIRTUAL_WIDTH/2, VIRTUAL_HEIGHT/2)
     love.graphics.draw(ships[math.random(#ships)], ship_pos_x, ship_pos_y)
     love.graphics.pop()
