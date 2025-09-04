@@ -25,6 +25,7 @@ function love.load()
     }
     love.graphics.setDefaultFilter("nearest", "nearest")
 
+    phaser = love.audio.newSource("assets/phaser_beam.wav", "static")
     music = love.audio.newSource("assets/lead_balloon_theme.wav", "stream")
     music:setLooping(true)
     music:play()
@@ -43,6 +44,8 @@ function love.update(dt)
     elseif love.keyboard.isDown("j") then
         ship_pos_x = ship_pos_x - 50 * dt
     end
+
+    update_phaser_beams(dt)
 end
 
 function love.draw()
@@ -54,15 +57,47 @@ function love.draw()
     love.graphics.push()
     love.graphics.scale(scale)
 
-    love.graphics.setColor(0.1, 0.1, 0.1) -- Dark gray
-    love.graphics.rectangle("fill", 0, 0, VIRTUAL_WIDTH/2 - 20, VIRTUAL_HEIGHT) -- left wall
-    love.graphics.rectangle("fill", VIRTUAL_WIDTH/2 + 20, 0, VIRTUAL_WIDTH/2 - 20, VIRTUAL_HEIGHT) -- right wall
-    love.graphics.setColor(1, 1, 1) -- Reset to white
-
+    draw_phaser_beams()
     -- sprites
     love.graphics.draw(aliens[1], VIRTUAL_WIDTH/2, VIRTUAL_HEIGHT/2)
     love.graphics.draw(ships[math.random(#ships)], ship_pos_x, ship_pos_y)
     love.graphics.pop()
+end
+
+function love.keypressed(key)
+    if key == "space" then
+        phaser:play()
+        shoot_phaser()
+    end
+end
+
+phaser_beams = {}
+
+function shoot_phaser()
+    local beam = {
+        x = ship_pos_x + SHIP_WIDTH / 2,
+        y = ship_pos_y,
+        speed = 120
+    }
+    table.insert(phaser_beams, beam)
+end
+
+function update_phaser_beams(dt)
+    for i = #phaser_beams, 1, -1 do
+        local beam = phaser_beams[i]
+        beam.y = beam.y - beam.speed * dt
+        if beam.y < 0 then
+            table.remove(phaser_beams, i)
+        end
+    end
+end
+
+function draw_phaser_beams()
+    love.graphics.setColor(1, 1, 0)
+    for _, beam in ipairs(phaser_beams) do
+        love.graphics.rectangle("fill", beam.x - 1, beam.y, 2, 6)
+    end
+    love.graphics.setColor(1, 1, 1)
 end
 
 function draw_start_message()
