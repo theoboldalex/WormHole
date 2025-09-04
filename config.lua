@@ -39,7 +39,7 @@ config.load = function()
     }
     love.graphics.setDefaultFilter("nearest", "nearest")
     phaser_beams = {}
-    bullet = love.audio.newSource("assets/phaser_beam.wav", "static")
+    pew = love.audio.newSource("assets/phaser_beam.wav", "static")
     music = love.audio.newSource("assets/lead_balloon_theme.wav", "stream")
     music:setLooping(true)
 end

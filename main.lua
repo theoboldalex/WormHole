@@ -1,6 +1,6 @@
 function love.load()
     require("config").load()
-    phaser = require("phaser")
+    guns = require("phaser")
     music:play()
 end
 
@@ -11,7 +11,7 @@ function love.update(dt)
         ship_pos_x = ship_pos_x - 50 * dt
     end
 
-    phaser.update_phaser_beams(dt)
+    guns.update_phaser_beams(dt)
 end
 
 function love.draw()
@@ -24,7 +24,7 @@ function love.draw()
     love.graphics.push()
     love.graphics.scale(scale)
 
-    phaser.draw_phaser_beams()
+    guns.draw_phaser_beams()
     -- sprites
     love.graphics.draw(aliens[1], VIRTUAL_WIDTH/2, VIRTUAL_HEIGHT/2)
     love.graphics.draw(ships[math.random(#ships)], ship_pos_x, ship_pos_y)
@@ -38,8 +38,8 @@ function love.keypressed(key)
             start_message = ""
             return
         end
-        bullet:play()
-        phaser.shoot_phaser()
+        pew:play()
+        guns.shoot_phaser()
     end
 end
 
